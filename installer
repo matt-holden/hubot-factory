@@ -1,0 +1,22 @@
+#!/usr/bin/env ruby
+
+require "fileutils"
+
+PACKAGE_NAME = "hubot-factory"
+BUILD_DIR = "build"
+PACKAGE_JSON = "package.json"
+
+current_path = File.expand_path(File.dirname(__FILE__))
+sdk_root = current_path[/.*#{PACKAGE_NAME}/]
+
+build_path = File.join(sdk_root, BUILD_DIR)
+FileUtils.rm_r(build_path) if File.exists?(build_path)
+FileUtils.mkdir(build_path)
+
+FileUtils.cp(PACKAGE_JSON, build_path)
+Dir.chdir(build_path)
+system('npm install')
+
+throw "error with install" if $? != 0
+
+
