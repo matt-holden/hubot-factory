@@ -1,0 +1,19 @@
+{
+  adapters: [{
+    // botname: Defualts to "Chatman"
+    name: 'campfire'
+    environment: {
+      "HUBOT_CAMPFIRE_ACCOUNT": "mindbody"
+      "HUBOT_CAMPFIRE_TOKEN": "f36769a41dc8ed691140f3334df5aa60400eb55d"
+      "HUBOT_CAMPFIRE_ROOMS": "549071"
+    }
+  },
+  {
+    // botname: Defualts to "Chatman"
+    name: 'flowdock'
+    environment: {
+      "HUBOT_FLOWDOCK_LOGIN_EMAIL" : "matt.holden@mindbodyonline.com",
+      "HUBOT_FLOWDOCK_LOGIN_PASSWORD" : "chatman123"
+    }
+  }]
+}

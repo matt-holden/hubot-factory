@@ -1,22 +1,36 @@
 #!/usr/bin/env ruby
 
 require "fileutils"
+require "tmpdir"
 
 PACKAGE_NAME = "hubot-factory"
-BUILD_DIR = "build"
+PROJECT_DIR = "project"
 PACKAGE_JSON = "package.json"
+NODE_MODULES = "node_modules"
+MY_BOT_ALIAS = "my-hubot"
 
 current_path = File.expand_path(File.dirname(__FILE__))
 sdk_root = current_path[/.*#{PACKAGE_NAME}/]
 
-build_path = File.join(sdk_root, BUILD_DIR)
-FileUtils.rm_r(build_path) if File.exists?(build_path)
-FileUtils.mkdir(build_path)
+project_path = File.join(sdk_root, PROJECT_DIR)
 
-FileUtils.cp(PACKAGE_JSON, build_path)
-Dir.chdir(build_path)
+#delete everything except package.json from /project
+project_node_modules_path = File.join(project_path, NODE_MODULES)
+FileUtils.rm_r(project_node_modules_path) if File.exists?(project_node_modules_path)
+
+bot_alias_path = File.join(project_path, MY_BOT_ALIAS)
+FileUtils.rm(bot_alias_path) if File.exists?(bot_alias_path)
+
+# cd into /project_path/
+Dir.chdir(project_path)
+package_path = File.join(sdk_root, PACKAGE_NAME)
+# install dependencies from hubot-factory
+system("npm install #{package_path}")
+# regular "npm install"
 system('npm install')
 
+template_path = File.join(project_path, "node_modules", "hubot-factory", "node_modules", "hubot", "src", "templates")
+`ln -s #{template_path} #{MY_BOT_ALIAS}`
 throw "error with install" if $? != 0
 
 
